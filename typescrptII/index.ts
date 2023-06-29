@@ -1,3 +1,3 @@
 import saludar from "./otro" ;
 
-saludar("Christian");
+saludar(" Beltran");
