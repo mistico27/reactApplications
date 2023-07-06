@@ -6,6 +6,9 @@ import { useState } from "react";
 export const AjaxComponent =()=>{
 
     const[usuarios,setUsuarios]=useState([]);
+    const[loading,setLoading]=useState(true);
+    const[error, setError]=useState("");
+
     ///basico
     const getUsuarios = ()=>{
         setUsuarios([
@@ -33,24 +36,70 @@ export const AjaxComponent =()=>{
         ]);
     }
     
-    
-    useEffect(()=>{
-        getUsuarios();
-        
-    },[]);
-    
-    
 
+    const hetUsusariosAjaxProm =()=>{
+        fetch("https://reqres.in/api/users?page=1")
+             .then(respuesta=>respuesta.json())
+             .then(resultado_final=>{
+                setUsuarios(resultado_final.data);
+             },
+                error=>{
+                    console.log(error);
+                }    
+             );
+    }
+    
+    const getUsuariosAsyncAwait=async()=>{
+        try{
+        setTimeout(async()=>{
+            const peticion= await fetch("https://reqres.in/api/users?page=1");
+            const {data} =await peticion.json();
+            setUsuarios(data);
+            setLoading(false);
+        },2000)
+    }catch(e){
+        setError(e.message);
+    }
+    }
+
+
+    useEffect(()=>{
+        ///getUsuarios();
+        ///hetUsusariosAjaxProm();
+        getUsuariosAsyncAwait();
+    },[]);
+
+if(error!==""){
     return(
-        <div>
-            <h2>Listado de usuarios</h2>
-            <ol className="users">
-             {
-            usuarios.map(usuario=>{
-                return <li key={usuario.id} name={usuario.first_name}>{usuario.first_name}</li>
-            })
-            }
-            </ol>
+        <div className="errores">
+            {error}
         </div>
-    )
+    );
+
+}else if(loading==true){
+///cuando se esta cargando
+return(
+    <div className="cargando">
+        cargando Datos...
+    </div>
+);
+    }else if(loading==false && error===""){
+///cuando todo ha ido bien
+return(
+    <div>
+        <h2>Listado de usuarios</h2>
+        <ol className="users">
+         {
+        usuarios.map(usuario=>{
+            return <li key={usuario.id}>
+                <img src={usuario.avatar} width="80"/>
+                &nbsp;
+                {usuario.first_name} {usuario.last_name}
+                </li>
+        })
+        }
+        </ol>
+    </div>
+)
+    }   
 }
