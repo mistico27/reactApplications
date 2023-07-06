@@ -9,6 +9,7 @@ import Home from './pages/home';
 import List from './layouts/list';
 import PokemonDetail from './pages/pokemonDetail';
 
+
 const router = createBrowserRouter([
   {
     path: "/",
