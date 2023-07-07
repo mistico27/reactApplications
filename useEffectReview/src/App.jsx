@@ -4,15 +4,13 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { PruebasComponent } from './components/pruebasComponent'
 import { AjaxComponent } from './components/AjaxComponent'
-
+import { LoginComponent } from './components/loginComponent'
 function App() {
   
 
   return (
     <>
-     <PruebasComponent />
-
-     <AjaxComponent />
+    <LoginComponent />
     </>
   )
 }
